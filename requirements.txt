@@ -1,0 +1,25 @@
+loguru
+mkdocs
+pip
+python-dotenv
+ruff
+tqdm
+typer
+-e .
+pandas
+numpy
+matplotlib
+seaborn
+scipy
+scikit-learn
+xgboost
+lightgbm
+catboost
+optuna
+mlflow
+dagshub
+pingouin
+ipykernel
+ipywidgets
+fastapi
+uvicorn

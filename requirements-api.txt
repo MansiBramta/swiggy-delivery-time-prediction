@@ -1,0 +1,11 @@
+fastapi==0.156.4
+joblib==1.6.0
+loguru==0.7.3
+numpy==2.5.4
+pandas==3.0.6
+pydantic==2.14.1
+python-dotenv==1.2.4
+scikit-learn==1.9.1
+scipy==1.18.1
+typer==0.27.3
+uvicorn==0.54.0
