@@ -1,0 +1,57 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test-and-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: requirements-api.txt
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements-api.txt pytest httpx
+
+      - name: Run tests
+        run: python -m pytest -v
+
+      - name: Create a stub model for the container smoke test
+        run: |
+          python - <<'EOF'
+          from pathlib import Path
+          import joblib
+          from sklearn.dummy import DummyRegressor
+
+          Path("models").mkdir(exist_ok=True)
+          stub = DummyRegressor(strategy="constant", constant=25.0).fit([[0]], [25.0])
+          joblib.dump(stub, "models/final_model.joblib")
+          EOF
+
+      - name: Build the Docker image
+        run: docker build -t swiggy-api .
+
+      - name: Start the container and check it responds
+        run: |
+          docker run -d --name api -p 8000:8000 swiggy-api
+          for i in $(seq 1 30); do
+            curl -sf http://localhost:8000/health && break
+            sleep 2
+          done
+          curl -sf http://localhost:8000/health
+          curl -sf -X POST http://localhost:8000/predict \
+            -H "Content-Type: application/json" \
+            -d '{"traffic": "low"}'
+
+      - name: Show the container logs
+        if: always()
+        run: docker logs api
