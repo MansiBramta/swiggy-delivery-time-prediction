@@ -39,7 +39,14 @@ def load_model():
     return m, "local"
 
 
-model, model_source = load_model()
+_state: dict = {}
+
+
+def get_model():
+    """Load the model on first use (so tests can run without the model file)."""
+    if "model" not in _state:
+        _state["model"], _state["source"] = load_model()
+    return _state["model"], _state["source"]
 
 
 class Order(BaseModel):
@@ -77,7 +84,8 @@ class Order(BaseModel):
 
 @app.get("/health")
 def health():
-    return {"status": "ok", "model_source": model_source}
+    _, source = get_model()
+    return {"status": "ok", "model_source": source}
 
 
 @app.post("/predict")
@@ -85,5 +93,6 @@ def predict(order: Order):
     X = pd.DataFrame([order.to_row()])
     float_cols = NUM_COLS + ["vehicle_condition"]
     X[float_cols] = X[float_cols].astype(float)
+    model, _ = get_model()
     pred = float(model.predict(X)[0])
     return {"predicted_delivery_time_min": round(pred, 1)}

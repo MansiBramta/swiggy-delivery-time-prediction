@@ -23,3 +23,5 @@ ipykernel
 ipywidgets
 fastapi
 uvicorn
+pytest
+httpx
