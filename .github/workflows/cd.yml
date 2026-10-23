@@ -30,6 +30,4 @@ jobs:
           docker build -t $IMAGE:${{ github.sha }} -t $IMAGE:latest .
           docker push $IMAGE:${{ github.sha }}
           docker push $IMAGE:latest
-      - name: Deploy to ECS
-        run: |
-          aws ecs update-service --region ap-southeast-2 --cluster swiggy-cluster --service swiggy-api --force-new-deployment
+    
