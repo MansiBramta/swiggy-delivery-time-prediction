@@ -16,10 +16,10 @@ jobs:
           python-version: "3.12"
 
       - name: Install dependencies
-        run: pip install -r requirements-api.txt pytest
+        run: pip install -r requirements-api.txt pytest httpx2
 
       - name: Run tests
-        run: pytest
+        run: python -m pytest
 
       - name: Build Docker image
         run: docker build -t swiggy-api .
