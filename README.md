@@ -7,6 +7,8 @@ Predicts how many minutes a Swiggy food delivery will take, from order, traffic,
 
 This is an end-to-end project: data cleaning, EDA and hypothesis tests, model comparison and tuning, experiment tracking and a model registry on DagsHub (MLflow), a FastAPI service, Docker, tests, CI, and a deployment on AWS.
 
+> ![Extension popup](reports/figures/extension_popup.png)`
+
 - GitHub: https://github.com/MansiBramta/swiggy-delivery-time-prediction
 - Experiments and model registry (DagsHub): https://dagshub.com/MansiBramta/swiggy-delivery-time-prediction
 
